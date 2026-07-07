@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   deleteChallengeLike,
@@ -33,6 +33,7 @@ interface MessageInputProps {
   suggestedMessage?: string;
   onMessageChange?: (text: string) => void;
   onHeartClick?: () => void;
+  focusTrigger?: number;
 }
 
 export const MessageInput = ({
@@ -49,6 +50,7 @@ export const MessageInput = ({
   suggestedMessage,
   onMessageChange,
   onHeartClick,
+  focusTrigger,
 }: MessageInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -56,6 +58,10 @@ export const MessageInput = ({
   const [isComposing, setIsComposing] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (focusTrigger) inputRef.current?.focus();
+  }, [focusTrigger]);
 
   const currentText = (isChatting ? suggestedMessage : localText) || "";
   const hasText = currentText.trim().length > 0;
